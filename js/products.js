@@ -1,51 +1,51 @@
 async function loadProducts() {
-    const response = await fetch("https://fakestoreapi.com/products");
-    const products = await response.json();
-    displayProducts(products);  
+    const response=await fetch("https://fakestoreapi.com/products");
+    const products=await response.json();
+    displayProducts(products);
 }
 
 function displayProducts(products) {
 
     // Find the container where products will be displayed
-    const container = document.querySelector('#all-products .container');
+    const container=document.querySelector('#all-products .container');
 
-   
+
     // Iterate over each product and create the HTML structure safely
     products.forEach(product => {
         // Create the main product div
-        const productElement = document.createElement('div');
+        const productElement=document.createElement('div');
         productElement.classList.add('product');
 
         // Create the product picture div
-        const pictureDiv = document.createElement('div');
+        const pictureDiv=document.createElement('div');
         pictureDiv.classList.add('product-picture');
-        const img = document.createElement('img');
-        img.src = product.image;
-        img.alt = `product: ${product.title}`;
+        const img=document.createElement('img');
+        img.src=product.image;
+        img.alt=`product: ${product.title}`;
         img.loading="lazy";
         img.width=250;
         pictureDiv.appendChild(img);
 
         // Create the product info div
-        const infoDiv = document.createElement('div');
+        const infoDiv=document.createElement('div');
         infoDiv.classList.add('product-info');
 
-        const category = document.createElement('h5');
+        const category=document.createElement('h5');
         category.classList.add('categories');
-        category.textContent = product.category;
+        category.textContent=product.category;
 
-        const title = document.createElement('h4');
+        const title=document.createElement('h4');
         title.classList.add('title');
-        title.textContent = product.title;
+        title.textContent=product.title;
 
-        const price = document.createElement('h3');
+        const price=document.createElement('h3');
         price.classList.add('price');
-        const priceSpan = document.createElement('span');
-        priceSpan.textContent = `US$ ${product.price}`;
+        const priceSpan=document.createElement('span');
+        priceSpan.textContent=`US$ ${product.price}`;
         price.appendChild(priceSpan);
 
-        const button = document.createElement('button');
-        button.textContent = 'Add to bag';
+        const button=document.createElement('button');
+        button.textContent='Add to bag';
 
         // Append elements to the product info div
         infoDiv.appendChild(category);
@@ -61,16 +61,38 @@ function displayProducts(products) {
         container.appendChild(productElement);
     });
 
-    
+
 
 }
 
+window.onload=() => {
+    const productsTag=document.getElementById('all-products')
+
+    let reachedPosition=false
+
+    const productsTagPositionFromTop=productsTag.getBoundingClientRect().top
+
+    // console.log("productsTagPositionFromTop>>>>>>>>>>", productsTagPositionFromTop);
+
+    // console.log('window.scrollY, window.innerHeight>>>>>>>>>', window.scrollY, window.innerHeight)
 
 
-loadProducts();
+    window.onscroll=() => {
+        // console.log('window.scrollY, window.innerHeight,window.scrollY+ window.innerHeight,productsTagPositionFromTop on scroll >>>>>>>>>', window.scrollY, window.innerHeight, window.scrollY+window.innerHeight, productsTagPositionFromTop)
 
-// Simulate heavy operation. It could be a complex price calculation.
-for (let i = 0; i < 10000000; i++) {
-    const temp = Math.sqrt(i) * Math.sqrt(i);
+        const position=productsTagPositionFromTop-(window.scrollY+window.innerHeight)
+
+        if (!reachedPosition&&position<=0) {
+            loadProducts();
+            reachedPosition=true
+
+            // Simulate heavy operation. It could be a complex price calculation.
+            for (let i=0;i<10000000;i++) {
+                const temp=Math.sqrt(i)*Math.sqrt(i);
+            }
+        }
+    }
+
+
 }
 
